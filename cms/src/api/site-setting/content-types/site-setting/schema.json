@@ -1,0 +1,118 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Setting"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "default": "Unclaimed Financial Assets Authority"
+    },
+    "shortName": {
+      "type": "string",
+      "default": "UFAA"
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "email": {
+      "type": "email"
+    },
+    "phones": {
+      "type": "text"
+    },
+    "postalAddress": {
+      "type": "text"
+    },
+    "physicalAddress": {
+      "type": "text"
+    },
+    "ussdCode": {
+      "type": "string"
+    },
+    "eCitizenUrl": {
+      "type": "string"
+    },
+    "claimPortalUrl": {
+      "type": "string"
+    },
+    "holdersPortalUrl": {
+      "type": "string"
+    },
+    "knowledgeHubLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.navigation-link"
+    },
+    "aboutLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.navigation-link"
+    },
+    "findClaimLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.navigation-link"
+    },
+    "reportAssetsLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.navigation-link"
+    },
+    "procurementLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.navigation-link"
+    },
+    "whatsappUrl": {
+      "type": "string"
+    },
+    "smsInstructionsUrl": {
+      "type": "string"
+    },
+    "playStoreUrl": {
+      "type": "string"
+    },
+    "appStoreUrl": {
+      "type": "string"
+    },
+    "facebookUrl": {
+      "type": "string"
+    },
+    "xUrl": {
+      "type": "string"
+    },
+    "linkedinUrl": {
+      "type": "string"
+    },
+    "youtubeUrl": {
+      "type": "string"
+    },
+    "instagramUrl": {
+      "type": "string"
+    },
+    "alertText": {
+      "type": "string"
+    },
+    "alertLink": {
+      "type": "string"
+    },
+    "footerNote": {
+      "type": "text"
+    }
+  }
+}

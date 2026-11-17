@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+.next/
+cms/.tmp/
+cms/dist/
+cms/build/
+cms/.strapi/
+cms/public/uploads/*
+!cms/public/uploads/.gitkeep
+*.log

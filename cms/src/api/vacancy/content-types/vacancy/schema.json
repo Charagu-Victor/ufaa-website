@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vacancies",
+  "info": {
+    "singularName": "vacancy",
+    "pluralName": "vacancies",
+    "displayName": "Vacancy"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "reference": {
+      "type": "string"
+    },
+    "jobGroup": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "publishedOn": {
+      "type": "date"
+    },
+    "closingDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "vacancyStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Open",
+        "Closed"
+      ],
+      "default": "Open"
+    },
+    "document": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files"
+      ]
+    }
+  }
+}

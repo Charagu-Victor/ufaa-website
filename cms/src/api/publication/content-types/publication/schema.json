@@ -1,0 +1,70 @@
+{
+  "kind": "collectionType",
+  "collectionName": "publications",
+  "info": {
+    "singularName": "publication",
+    "pluralName": "publications",
+    "displayName": "Publication"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "Section": {
+      "type": "text",
+      "default": "This is the section"
+    },
+    "sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.content-section"
+    },
+    "category": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Other",
+      "enum": [
+        "Annual Report",
+        "Strategic Plan",
+        "Service Charter",
+        "Policy",
+        "Act and Regulations",
+        "Claim Form",
+        "Holder Form",
+        "Newsletter",
+        "Other"
+      ]
+    },
+    "year": {
+      "type": "integer"
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "faqs",
+  "info": {
+    "singularName": "faq",
+    "pluralName": "faqs",
+    "displayName": "FAQ"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "answer": {
+      "type": "richtext",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "General",
+        "Claims",
+        "Beneficiaries",
+        "Holders"
+      ],
+      "default": "General",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 100
+    }
+  }
+}

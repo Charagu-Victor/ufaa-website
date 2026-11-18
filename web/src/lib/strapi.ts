@@ -140,18 +140,31 @@ export function getPage(slug: string, parent?: PageSection, draft = false) {
 
 // ---------- News ----------
 
-export function listNews(opts: { page?: number; pageSize?: number; category?: string; featured?: boolean } = {}) {
-  const { page = 1, pageSize = 9, category, featured } = opts;
+export function listNews(opts: { page?: number; pageSize?: number; category?: string; featured?: boolean; year?: number } = {}) {
+  const { page = 1, pageSize = 9, category, featured, year } = opts;
   return list<NewsArticle>(
     "news-articles",
     {
       filters: {
         ...(category ? { category: { $eq: category } } : {}),
         ...(featured ? { featured: { $eq: true } } : {}),
+        ...(year ? { publishedOn: { $gte: `${year}-01-01`, $lt: `${year + 1}-01-01` } } : {}),
       },
       sort: ["publishedOn:desc"],
       populate: ["cover"],
       pagination: { page, pageSize },
+    },
+    { tag: "news-article" },
+  );
+}
+
+export function listNewsYears() {
+  return list<Pick<NewsArticle, "publishedOn">>(
+    "news-articles",
+    {
+      fields: ["publishedOn"],
+      sort: ["publishedOn:desc"],
+      pagination: { page: 1, pageSize: 100 },
     },
     { tag: "news-article" },
   );

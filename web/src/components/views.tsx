@@ -26,12 +26,23 @@ export function CmsPageView({ page }: { page: CmsPage }) {
           />
         )}
         <Markdown>{page.body}</Markdown>
-        {page.sections?.map((section) => (
-          <section key={section.id} className="mt-10 max-w-[68ch]">
-            <h2 className="mb-4 font-serif text-2xl text-ledger-900">{section.heading}</h2>
-            <Markdown>{section.body}</Markdown>
-          </section>
-        ))}
+        {page.sections?.map((section) => {
+          const sectionImage = mediaUrl(section.image);
+          return (
+            <section key={section.id} className="mt-10 max-w-[72ch] rounded-2xl border border-line bg-white p-6 sm:p-8">
+              {sectionImage && section.image && (
+                <Image src={sectionImage} alt={section.imageAlt ?? section.image.alternativeText ?? ""} width={section.image.width ?? 1200} height={section.image.height ?? 675} unoptimized className="mb-6 max-h-96 w-full rounded-xl object-cover" />
+              )}
+              <h2 className="mb-4 text-2xl font-bold text-ledger-900">{section.heading}</h2>
+              <Markdown>{section.body}</Markdown>
+              {section.actionLabel && section.actionUrl && (
+                <a href={section.actionUrl} className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-ledger-900 px-5 py-2.5 font-semibold text-white transition hover:bg-ledger-800">
+                  {section.actionLabel}<span className="ml-2" aria-hidden="true">→</span>
+                </a>
+              )}
+            </section>
+          );
+        })}
       </Container>
     </>
   );

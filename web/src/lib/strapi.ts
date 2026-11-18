@@ -1,6 +1,7 @@
 import qs from "qs";
 import type {
   CmsPage,
+  Department,
   Faq,
   Homepage,
   NewsArticle,
@@ -87,7 +88,7 @@ async function first<T>(
 export async function getSiteSettings(): Promise<SiteSetting> {
   const res = await request<StrapiSingle<SiteSetting>>(
     "site-setting",
-    { populate: { logo: true, aboutLinks: true, knowledgeHubLinks: true, findClaimLinks: true, reportAssetsLinks: true, procurementLinks: true } },
+    { populate: { logo: true, aboutLinks: true, knowledgeHubLinks: true, findClaimLinks: true, reportAssetsLinks: true, procurementLinks: true, mainNavigation: { populate: ["items"] }, footerLinks: true } },
     { tag: "site-setting" },
   );
   return (
@@ -102,7 +103,7 @@ export async function getSiteSettings(): Promise<SiteSetting> {
 export async function getHomepage(): Promise<Homepage | null> {
   const res = await request<StrapiSingle<Homepage>>(
     "homepage",
-    { populate: { stats: true, steps: true, heroImage: true, galleryImages: { populate: ["image"] }, seo: { populate: ["shareImage"] } } },
+    { populate: { stats: true, steps: true, heroImage: true, claimHeroClip: true, holderHeroClip: true, galleryImages: { populate: ["image"] }, seo: { populate: ["shareImage"] } } },
     { tag: "homepage" },
   );
   return res?.data ?? null;
@@ -124,7 +125,7 @@ export function getPage(slug: string, parent?: PageSection, draft = false) {
     "pages",
     {
       filters: { slug: { $eq: slug }, ...(parent ? { parent: { $eq: parent } } : {}) },
-      populate: { cover: true, seo: { populate: ["shareImage"] }, sections: true },
+      populate: { cover: true, seo: { populate: ["shareImage"] }, sections: { populate: ["image"] } },
     },
     { tag: "page", draft },
   );
@@ -241,6 +242,15 @@ export async function listTeam() {
     "team-members",
     { sort: ["order:asc", "name:asc"], populate: ["photo"], pagination: { pageSize: 100 } },
     { tag: "team-member" },
+  );
+  return res.data;
+}
+
+export async function listDepartments() {
+  const res = await list<Department>(
+    "departments",
+    { sort: ["order:asc", "name:asc"], populate: ["image"], pagination: { pageSize: 100 } },
+    { tag: "department" },
   );
   return res.data;
 }

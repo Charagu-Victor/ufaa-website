@@ -44,6 +44,8 @@ export type SiteSetting = {
   findClaimLinks?: { id: number; label: string; href: string }[];
   reportAssetsLinks?: { id: number; label: string; href: string }[];
   procurementLinks?: { id: number; label: string; href: string }[];
+  mainNavigation?: { id: number; label: string; href?: string | null; items?: { id: number; label: string; href: string }[] }[];
+  footerLinks?: { id: number; label: string; href: string }[];
   whatsappUrl?: string | null;
   smsInstructionsUrl?: string | null;
   playStoreUrl?: string | null;
@@ -62,6 +64,8 @@ export type Homepage = {
   heroTitle: string;
   heroSubtitle?: string | null;
   heroImage?: Media | null;
+  claimHeroClip?: Media | null;
+  holderHeroClip?: Media | null;
   stats?: { id: number; value: string; label: string }[];
   introTitle?: string | null;
   introBody?: string | null;
@@ -80,7 +84,7 @@ export type CmsPage = {
   parent: PageSection;
   body?: string | null;
   cover?: Media | null;
-  sections?: { id: number; heading: string; body?: string | null }[];
+  sections?: { id: number; heading: string; body?: string | null; image?: Media | null; imageAlt?: string | null; actionLabel?: string | null; actionUrl?: string | null }[];
   seo?: Seo | null;
   updatedAt?: string;
 };
@@ -172,6 +176,20 @@ export type TeamMember = {
   group: "Board" | "Management";
   bio?: string | null;
   photo?: Media | null;
+  order: number;
+};
+
+export type Department = {
+  documentId: string;
+  name: string;
+  slug: string;
+  summary: string;
+  mandate?: string | null;
+  services?: string | null;
+  head?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  image?: Media | null;
   order: number;
 };
 

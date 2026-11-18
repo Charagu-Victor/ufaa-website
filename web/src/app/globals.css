@@ -67,6 +67,52 @@ body {
   will-change: opacity, transform;
 }
 
+@keyframes clip-float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes clip-dash {
+  to { stroke-dashoffset: -88; }
+}
+
+@keyframes clip-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.hero-clip {
+  animation: hero-clip-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes hero-clip-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.clip-float {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clip-float-y 4s ease-in-out infinite;
+}
+
+.clip-float-delay {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clip-float-y 4s ease-in-out -2s infinite;
+}
+
+.clip-route {
+  stroke-dasharray: 10 12;
+  animation: clip-dash 7s linear infinite;
+}
+
+.clip-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clip-pulse 2.8s ease-in-out infinite;
+}
+
 .gallery-track {
   scrollbar-width: none;
 }
@@ -83,6 +129,13 @@ body {
     animation-duration: 0.01ms !important;
   }
   .hero-slide {
+    animation: none;
+  }
+  .hero-clip,
+  .clip-float,
+  .clip-float-delay,
+  .clip-route,
+  .clip-pulse {
     animation: none;
   }
 }

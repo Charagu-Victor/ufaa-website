@@ -9,6 +9,13 @@ type NavGroup = { label: string; href: string; items: NavItem[] };
 
 /** Builds the main navigation from CMS pages plus the fixed UFAA sections. */
 function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPageIndex>>): NavGroup[] {
+  if (settings.mainNavigation?.length) {
+    return settings.mainNavigation.map((group) => ({
+      label: group.label,
+      href: group.href ?? "#",
+      items: group.items?.map(({ label, href }) => ({ label, href })) ?? [],
+    }));
+  }
   const configuredLinks = (links: SiteSetting["knowledgeHubLinks"], fallback: NavItem[]): NavItem[] =>
     links?.length ? links.map(({ label, href }) => ({ label, href })) : fallback;
 
@@ -21,6 +28,7 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
         { label: "About Us", href: "/about/about-ufaa" },
         { label: "Board Of Directors", href: "/leadership#board-of-directors" },
         { label: "Management Team", href: "/leadership#management-team" },
+        { label: "Departments", href: "/departments" },
         { label: "Access To Information", href: "/about/access-to-information" },
       ]),
     },
@@ -56,7 +64,7 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
       items: configuredLinks(settings.procurementLinks, [
         { label: "Tenders On EGP", href: "/tenders" },
         { label: "Procurement Plan", href: "/publications" },
-        { label: "E-Procurement", href: "https://eprocurement.ufaa.go.ke" },
+        { label: "E-Procurement", href: "https://egpkenya.go.ke/login" },
       ]),
     },
     {
@@ -142,8 +150,8 @@ export async function SiteHeader() {
         </Container>
       </div>
 
-      <header className="relative z-30 border-b border-line/80 bg-white text-ledger-900">
-        <Container className="!max-w-[1640px] !px-4 relative flex min-h-[88px] items-center justify-start gap-4 py-3 sm:min-h-[104px] sm:!px-6 sm:py-4 xl:gap-5 2xl:!px-10">
+      <header className="sticky top-0 z-50 border-b border-line/80 bg-white text-ledger-900">
+        <Container className="!max-w-[1640px] !px-4 relative flex min-h-[76px] items-center justify-start gap-4 py-2 sm:min-h-[88px] sm:!px-6 sm:py-2 xl:gap-5 2xl:!px-10">
           <Link href="/" className="flex flex-col leading-tight" aria-label={`${settings.siteName}, home`}>
             {logoUrl ? (
               // Use the CMS logo when configured, with the UFAA wordmark as a fallback.
@@ -151,7 +159,7 @@ export async function SiteHeader() {
               <img
                 src={logoUrl}
                 alt={`${settings.siteName} logo`}
-                className="h-auto max-h-[82px] w-auto max-w-[min(60vw,380px)] object-contain sm:max-h-[94px] min-[1500px]:max-w-[380px]"
+                className="h-auto max-h-[64px] w-auto max-w-[min(60vw,380px)] object-contain sm:max-h-[72px] min-[1500px]:max-w-[380px]"
               />
             ) : (
               <span className="flex max-w-[min(78vw,420px)] items-center gap-2 sm:gap-3" aria-label={`${settings.siteName} logo`}>
@@ -182,7 +190,7 @@ export async function SiteHeader() {
                 {group.items.length > 0 && group.href ? (
                   <Link
                     href={group.href}
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors 2xl:px-2.5 2xl:text-sm min-[1800px]:px-3 ${group.label === "Find & Claim" ? "bg-ledger-900 text-white shadow-sm hover:bg-ledger-800" : "hover:bg-ledger-50 hover:text-ledger-700"}`}
+                    className="inline-flex items-center gap-1 rounded-full px-2 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors hover:bg-ledger-50 hover:text-ledger-700 2xl:px-2.5 2xl:text-sm min-[1800px]:px-3"
                     aria-haspopup="true"
                   >
                     {group.label}
@@ -278,11 +286,13 @@ export async function SiteFooter() {
         <div className={column}>
           <p className="mb-3 font-serif text-lg text-white">Quick links</p>
           <ul className="space-y-1.5">
-            <li><Link className={link} href="/find-claim">Search and claim</Link></li>
-            <li><Link className={link} href="/news">News</Link></li>
-            <li><Link className={link} href="/notices">Notices</Link></li>
-            <li><Link className={link} href="/publications">Publications and forms</Link></li>
-            <li><Link className={link} href="/faqs">Frequently asked questions</Link></li>
+            {(settings.footerLinks?.length ? settings.footerLinks : [
+              { id: 1, label: "Search and claim", href: "/find-claim" },
+              { id: 2, label: "News", href: "/news" },
+              { id: 3, label: "Notices", href: "/notices" },
+              { id: 4, label: "Publications and forms", href: "/publications" },
+              { id: 5, label: "Frequently asked questions", href: "/faqs" },
+            ]).map((item) => <li key={item.id}><Link className={link} href={item.href}>{item.label}</Link></li>)}
           </ul>
         </div>
 

@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { AssetJourney } from "@/components/AssetJourney";
-import { HomepageGallery } from "@/components/HomepageGallery";
 import { Container, EmptyState, Tag } from "@/components/ui";
 import { formatDate, mediaUrl } from "@/lib/format";
 import { getHomepage, getSiteSettings, listNews, listNotices } from "@/lib/strapi";
@@ -43,9 +42,26 @@ export default async function HomePage() {
           width: home.heroImage.width ?? 1200,
           height: home.heroImage.height ?? 900,
         } : null}
+        claimHeroClip={home?.claimHeroClip}
+        holderHeroClip={home?.holderHeroClip}
         ussdCode={settings.ussdCode}
         steps={home?.steps}
       />
+
+      {home?.stats?.length ? (
+        <section aria-label="UFAA impact" className="relative z-10 -mt-5">
+          <Container>
+            <dl className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[0_18px_55px_rgba(16,23,68,0.10)] sm:grid-cols-2 lg:grid-cols-4">
+              {home.stats.slice(0, 4).map((stat) => (
+                <div key={stat.id} className="bg-white px-6 py-6 sm:px-7">
+                  <dt className="text-sm font-medium text-muted">{stat.label}</dt>
+                  <dd className="mt-1 text-3xl font-bold tracking-tight text-ledger-900">{stat.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Container>
+        </section>
+      ) : null}
 
       <AssetJourney claimHref={claimHref} ussdCode={settings.ussdCode} />
 
@@ -99,8 +115,6 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
-
-      <HomepageGallery images={home?.galleryImages ?? []} />
 
       {/* News and notices */}
       <Container className="mt-14 grid gap-12 lg:grid-cols-5">

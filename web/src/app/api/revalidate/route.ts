@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
     revalidateTag(`strapi:${model}`, "max");
     // Navigation and the home page depend on several content types.
     if (model === "page") revalidateTag("strapi:homepage", "max");
+    if (model === "department") revalidateTag("strapi:department", "max");
   } else {
     revalidateTag("strapi", "max");
   }

@@ -9,19 +9,27 @@ type NavItem = { label: string; href: string; items?: NavItem[] };
 type NavGroup = { label: string; href: string; items: NavItem[] };
 
 const DIY_LINK: NavItem = { label: "Do It Yourself", href: "/knowledge-hub/do-it-yourself" };
+const GALLERY_LINK: NavItem = { label: "Gallery", href: "/knowledge-hub/gallery" };
 
-function withResourceCentre(items: NavItem[]): NavItem[] {
-  const resourceCentre: NavItem = {
-    label: "Resource Centre",
-    href: DIY_LINK.href,
-    items: [DIY_LINK],
-  };
-  const existingResourceCentre = items.findIndex((item) => item.label.toLowerCase() === "resource centre");
+function withKnowledgeHubLinks(items: NavItem[]): NavItem[] {
+  const links = [...items];
+  const resourceCentreIndex = links.findIndex((item) => item.label.toLowerCase() === "resource centre");
 
-  if (existingResourceCentre === -1) return [resourceCentre, ...items];
-  return items.map((item, index) =>
-    index === existingResourceCentre ? { ...item, items: [DIY_LINK, ...(item.items ?? [])] } : item,
-  );
+  if (resourceCentreIndex === -1) {
+    links.unshift({ label: "Resource Centre", href: DIY_LINK.href, items: [DIY_LINK] });
+  } else {
+    const resourceCentre = links[resourceCentreIndex];
+    const children = resourceCentre.items ?? [];
+    if (!children.some((item) => item.label.toLowerCase() === DIY_LINK.label.toLowerCase())) {
+      links[resourceCentreIndex] = { ...resourceCentre, items: [DIY_LINK, ...children] };
+    }
+  }
+
+  if (!links.some((item) => item.label.toLowerCase() === GALLERY_LINK.label.toLowerCase())) {
+    links.push(GALLERY_LINK);
+  }
+
+  return links;
 }
 
 const navHref = (href: string) => {
@@ -38,7 +46,7 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
       label: group.label,
       href: group.href ? navHref(group.href) : "#",
       items: group.label.toLowerCase() === "knowledge hub"
-        ? withResourceCentre(group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [])
+        ? withKnowledgeHubLinks(group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [])
         : group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [],
     }));
   }
@@ -97,11 +105,12 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
     {
       label: "Knowledge Hub",
       href: "/publications",
-      items: withResourceCentre(configuredLinks(settings.knowledgeHubLinks, [
+      items: withKnowledgeHubLinks(configuredLinks(settings.knowledgeHubLinks, [
         { label: "Publications and forms", href: "/publications" },
         { label: "Frequently asked questions", href: "/faqs" },
         { label: "News", href: "/news" },
         { label: "Notices", href: "/notices" },
+        { label: "Gallery", href: "/knowledge-hub/gallery" },
       ])),
     },
     { label: "Careers", href: CAREERS_SITE_URL, items: [] },

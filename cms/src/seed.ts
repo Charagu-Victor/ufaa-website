@@ -41,6 +41,7 @@ export async function seedDemoData(strapi: Core.Strapi) {
         { label: 'Frequently asked questions', href: '/faqs' },
         { label: 'News', href: '/news' },
         { label: 'Notices', href: '/notices' },
+        { label: 'Gallery', href: '/knowledge-hub/gallery' },
       ],
       aboutLinks: [
         { label: 'About Us', href: '/about/about-ufaa' },

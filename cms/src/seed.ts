@@ -175,14 +175,152 @@ export async function seedDemoData(strapi: Core.Strapi) {
     },
   } as any);
 
-  const faqs = [
-    ['General', 'What is the Unclaimed Financial Assets Authority?', 'A state corporation established under the Unclaimed Financial Assets Act, No. 40 of 2011 to receive, safeguard and re-unite unclaimed financial assets with their rightful owners.'],
-    ['General', 'Do I lose my assets once they are remitted to UFAA?', 'No. Once remitted, the Authority holds the assets in the public interest and you keep an indefinite right of reunification.'],
-    ['Claims', 'Is there a deadline for filing a claim?', 'No. Owners can claim their assets at any time.'],
-    ['Claims', 'How long does it take to process a claim?', 'After receipt of a fully supported claim, an original owner claim is processed within 30 days and a beneficiary claim within 90 days.'],
-    ['Claims', 'Does it cost anything to search or claim?', 'The search and claim service is free.'],
-    ['Claims', 'Can I check for unclaimed assets without visiting an office?', 'Yes. You can search through the UFAA website, or dial the USSD code *361#.'],
-    ['Holders', 'How do holders report and surrender unclaimed assets?', 'Cash is remitted to the Unclaimed Assets Trust Fund account at the Central Bank of Kenya, and non-cash assets are reported through the holders reporting portal.'],
+  type FaqCategory = 'General' | 'Claims' | 'Beneficiaries' | 'Holders';
+  const faqs: [FaqCategory, string, string][] = [
+    [
+      'General',
+      'What is Unclaimed Financial Assets?',
+      `These are assets that:
+
+1. Have been presumed abandoned and have become unclaimed assets under sections 4 to 18 of the Unclaimed Financial Assets Act.
+2. Have been transferred to the Authority as unclaimed assets.
+3. Have been deemed under another law to be unclaimed assets payable to the Authority. This includes income, dividends and interest, but excludes lawful charges.`,
+    ],
+    [
+      'General',
+      'How far back does the Unclaimed Financial Assets Law apply?',
+      'Although the Law was enacted in 2011, it applies retrospectively to the date the holding institution was incorporated.',
+    ],
+    [
+      'General',
+      'What are examples of unclaimed assets?',
+      `Examples include:
+
+1. Dormant accounts at banks.
+2. Unclaimed deposits and benefits from collapsed institutions.
+3. Unclaimed dividends and interest earned from stocks and shares.
+4. Unclaimed utility deposits held by power and water companies.
+5. Unclaimed retirement benefits in pension funds.
+6. Unclaimed death benefits and annuities from insurance companies.
+7. Unclaimed bail and bond money deposited in courts of law.
+8. Uncollected prize money, for example from a lottery.`,
+    ],
+    [
+      'Claims',
+      'Do I lose my money once it is turned over to UFAA?',
+      "No. You do not lose unclaimed financial assets once they are remitted to the Authority. UFAA holds assets on behalf of the Government in the public interest and guarantees an indefinite right of reunification. Next of kin should regularly check the status of their deceased relatives' assets.",
+    ],
+    [
+      'General',
+      'Who bears the cost for opening a safe deposit box?',
+      'If a safe deposit box is forced open, the Authority bears the cost of opening the box and repairing it.',
+    ],
+    [
+      'General',
+      'Who has unclaimed financial assets?',
+      'Anyone can have unclaimed financial assets.',
+    ],
+    [
+      'Claims',
+      'How long does it take to process a claim?',
+      'After receiving a fully supported claim, UFAA processes an original-owner claim within 30 days and a beneficiary claim within 90 days. See the [Service Charter](/publications?category=Service%20Charter) for more details.',
+    ],
+    [
+      'Claims',
+      'Is there a deadline for lodging a claim?',
+      'There is no deadline for filing a claim with UFAA. Owners can claim their assets at any time.',
+    ],
+    [
+      'General',
+      'How do assets become "unclaimed"?',
+      `Under sections 3 to 18 of the Unclaimed Financial Assets Act, 2011, assets may be deemed unclaimed when:
+
+1. The owner has not communicated with the holder beyond the dormancy period prescribed in the Act.
+2. The holder's records do not show the identity of the person entitled to the assets.
+3. The owner has not transacted with the holder within the prescribed dormancy period.
+4. The holder has not previously paid or delivered the assets to the owner.
+
+Other causes may include forgetfulness, poor record-keeping, relocation within or outside the region, and death.`,
+    ],
+    [
+      'Holders',
+      'Who is a holder?',
+      'A holder is an entity that is in possession of a financial asset on behalf of an owner.',
+    ],
+    [
+      'Holders',
+      'What are the duties of holders?',
+      `Holders of unclaimed assets are required to:
+
+- Make reasonable efforts to locate the owner and notify them about the assets.
+- Send written notice to the apparent owner at their last known address, informing them that the holder has the assets.
+- Report the assets to the Unclaimed Financial Assets Authority.
+- Remit qualifying cash assets to the Unclaimed Assets Trust Fund account at the Central Bank of Kenya.
+- Report qualifying non-cash assets through the [holders reporting portal](/holders/login).`,
+    ],
+    [
+      'Holders',
+      'How long do different types of assets take before being considered unclaimed?',
+      `| Asset | Period before considered unclaimed |
+| --- | --- |
+| Money order or similar written financial or monetary instrument | 2 years from the date of issuance |
+| Traveller's cheque | 2 years from the date of issuance |
+| Cheque, draft or similar instrument | 2 years after it became payable or was issued |
+| Demand, savings or matured time deposits; funds paid towards a share, mutual investment certificate or other interest in a financial institution | 5 years |
+| Life or endowment insurance policy or annuity contract | 2 years after the funds become due |
+| Assets resulting from demutualisation of an insurance policy | 2 years after demutualisation |
+| Utility service deposit, such as electricity or water | 2 years after service termination |
+| Court order for a refund by the holder | 2 years after it became payable |
+| Ownership interest | 3 years |
+| Assets from a dissolved business entity | 2 years |
+| Assets held in a fiduciary capacity | 2 years after they become payable |
+| Gift certificate, gift card or credit memo/note | 5 years |
+| Unpaid wages | 1 year after they become payable |
+| Assets held in a safe deposit box or repository | 2 years after the lease or rental period expires |`,
+    ],
+    [
+      'Claims',
+      'How do I search for and lodge a claim on unclaimed assets?',
+      `Dial *361# or visit [Find & Claim](/find-claim) to search for assets.
+
+You can also visit UFAA at Pacis Centre, 2nd Floor, Slip Road, off Waiyaki Way, Westlands, Nairobi, or post mail to:
+
+UNCLAIMED FINANCIAL ASSETS AUTHORITY
+P.O. Box 28235-00200, City Square, Nairobi
+
+Call 020 4023 000 or +254 706 866 984, or email [info@ufaa.go.ke](mailto:info@ufaa.go.ke). You can also visit a Huduma Centre or lodge a claim on eCitizen.`,
+    ],
+    [
+      'Claims',
+      "Claimant's basic checklist",
+      `Complete the appropriate claim forms, available online at [ufaa.go.ke](https://www.ufaa.go.ke) or from UFAA offices. Forms should be witnessed by a Commissioner of Oaths where required:
+
+- Form 4A - Original Owner Claim
+- Form 4B - Beneficiary Claim (deceased cases)
+- Form 4C - Business Entity Claim
+- Form 4D - Agent for Owner Claim
+- Form 5 - Indemnity Agreement
+- Claimant's bank details form and a one-page copy of a recent bank statement, deposit slip or withdrawal slip confirming the bank account details provided
+- Original official letter from the holder confirming remittance of the unclaimed financial assets to the Authority
+- Copy of the claimant's National ID card or passport, certified by a lawyer or magistrate
+- Copy of the claimant's KRA PIN certificate
+- Original affidavit if names differ between the National ID, KRA PIN and holder's documents, or if a name is initialled in any document`,
+    ],
+    [
+      'General',
+      'What is the Unclaimed Financial Assets Authority?',
+      'The Unclaimed Financial Assets Authority (UFAA) is a State Corporation established under the Unclaimed Financial Assets Act, No. 40 of 2011 to receive, safeguard and reunite unclaimed financial assets with their rightful owners.',
+    ],
+    [
+      'Claims',
+      'Does it cost anything to search for or claim assets?',
+      'The search and claim service is free.',
+    ],
+    [
+      'Claims',
+      'Can I check for unclaimed assets without visiting an office?',
+      'Yes. You can search through the [Find & Claim](/find-claim) service or dial the USSD code *361#.',
+    ],
   ];
   let order = 10;
   for (const [category, question, answer] of faqs) {

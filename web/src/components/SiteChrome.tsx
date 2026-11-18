@@ -5,8 +5,24 @@ import { mediaUrl } from "@/lib/format";
 import { CAREERS_SITE_URL, CLAIM_PORTAL_URL, HOLDERS_PORTAL_URL, normalizeClaimPortalUrl, normalizeHoldersPortalUrl } from "@/lib/urls";
 import { Container } from "./ui";
 
-type NavItem = { label: string; href: string };
+type NavItem = { label: string; href: string; items?: NavItem[] };
 type NavGroup = { label: string; href: string; items: NavItem[] };
+
+const DIY_LINK: NavItem = { label: "Do It Yourself", href: "/knowledge-hub/do-it-yourself" };
+
+function withResourceCentre(items: NavItem[]): NavItem[] {
+  const resourceCentre: NavItem = {
+    label: "Resource Centre",
+    href: DIY_LINK.href,
+    items: [DIY_LINK],
+  };
+  const existingResourceCentre = items.findIndex((item) => item.label.toLowerCase() === "resource centre");
+
+  if (existingResourceCentre === -1) return [resourceCentre, ...items];
+  return items.map((item, index) =>
+    index === existingResourceCentre ? { ...item, items: [DIY_LINK, ...(item.items ?? [])] } : item,
+  );
+}
 
 const navHref = (href: string) => {
   if (href === "/find-claim") return CLAIM_PORTAL_URL;
@@ -21,7 +37,9 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
     return settings.mainNavigation.map((group) => ({
       label: group.label,
       href: group.href ? navHref(group.href) : "#",
-      items: group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [],
+      items: group.label.toLowerCase() === "knowledge hub"
+        ? withResourceCentre(group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [])
+        : group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [],
     }));
   }
   const configuredLinks = (links: SiteSetting["knowledgeHubLinks"], fallback: NavItem[]): NavItem[] =>
@@ -79,12 +97,12 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
     {
       label: "Knowledge Hub",
       href: "/publications",
-      items: configuredLinks(settings.knowledgeHubLinks, [
+      items: withResourceCentre(configuredLinks(settings.knowledgeHubLinks, [
         { label: "Publications and forms", href: "/publications" },
         { label: "Frequently asked questions", href: "/faqs" },
         { label: "News", href: "/news" },
         { label: "Notices", href: "/notices" },
-      ]),
+      ])),
     },
     { label: "Careers", href: CAREERS_SITE_URL, items: [] },
   ];
@@ -213,10 +231,33 @@ export async function SiteHeader() {
                 {group.items.length > 0 && (
                   <ul className="invisible absolute left-0 top-full z-40 min-w-64 translate-y-1 rounded-2xl border border-line bg-white p-2 text-ink opacity-0 shadow-[0_18px_45px_rgba(20,32,77,0.16)] transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
                     {group.items.map((item, index) => (
-                      <li key={`${group.label}-${item.label}-${item.href}-${index}`}>
-                        <Link href={item.href} className="block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ledger-50 hover:text-ledger-900">
+                      <li
+                        key={`${group.label}-${item.label}-${item.href}-${index}`}
+                        className={item.items?.length ? "group/resource relative" : undefined}
+                      >
+                        <Link
+                          href={item.href}
+                          aria-haspopup={item.items?.length ? "true" : undefined}
+                          className="flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ledger-50 hover:text-ledger-900"
+                        >
                           {item.label}
+                          {item.items?.length ? (
+                            <svg aria-hidden="true" viewBox="0 0 8 12" className="size-3 fill-none stroke-current" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="m2 1.5 4 4.5-4 4.5" />
+                            </svg>
+                          ) : null}
                         </Link>
+                        {item.items?.length ? (
+                          <ul className="invisible absolute left-full top-0 z-50 min-w-56 translate-x-1 rounded-2xl border border-line bg-white p-2 text-ink opacity-0 shadow-[0_18px_45px_rgba(20,32,77,0.16)] transition duration-150 group-hover/resource:visible group-hover/resource:translate-x-0 group-hover/resource:opacity-100 group-focus-within/resource:visible group-focus-within/resource:translate-x-0 group-focus-within/resource:opacity-100">
+                            {item.items.map((child, childIndex) => (
+                              <li key={`${item.label}-${child.label}-${child.href}-${childIndex}`}>
+                                <Link href={child.href} className="block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ledger-50 hover:text-ledger-900">
+                                  {child.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
                       </li>
                     ))}
                   </ul>
@@ -247,6 +288,17 @@ export async function SiteHeader() {
                         <Link href={item.href} className="block rounded-lg px-2 py-1.5 text-sm text-muted hover:bg-ledger-50 hover:text-ledger-900">
                           {item.label}
                         </Link>
+                        {item.items?.length ? (
+                          <ul className="ml-3 border-l border-line pl-2">
+                            {item.items.map((child, childIndex) => (
+                              <li key={`${item.label}-${child.label}-${child.href}-${childIndex}`}>
+                                <Link href={child.href} className="block rounded-lg px-2 py-1.5 text-sm text-muted hover:bg-ledger-50 hover:text-ledger-900">
+                                  {child.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
                       </li>
                     ))}
                   </ul>}

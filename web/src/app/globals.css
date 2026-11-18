@@ -81,6 +81,12 @@ body {
   50% { opacity: 1; transform: scale(1.08); }
 }
 
+@keyframes clip-chat-message-in {
+  0%, 12% { opacity: 0; transform: translateX(12px); }
+  24%, 76% { opacity: 1; transform: translateX(0); }
+  88%, 100% { opacity: 0; transform: translateX(-6px); }
+}
+
 .hero-clip {
   animation: hero-clip-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -113,6 +119,10 @@ body {
   animation: clip-pulse 2.8s ease-in-out infinite;
 }
 
+.clip-chat-message {
+  animation: clip-chat-message-in 5s ease-in-out infinite;
+}
+
 .gallery-track {
   scrollbar-width: none;
 }
@@ -135,7 +145,8 @@ body {
   .clip-float,
   .clip-float-delay,
   .clip-route,
-  .clip-pulse {
+  .clip-pulse,
+  .clip-chat-message {
     animation: none;
   }
 }

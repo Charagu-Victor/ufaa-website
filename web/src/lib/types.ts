@@ -66,6 +66,8 @@ export type Homepage = {
   heroImage?: Media | null;
   claimHeroClip?: Media | null;
   holderHeroClip?: Media | null;
+  whatsappHeroClip?: Media | null;
+  mobileAppHeroClip?: Media | null;
   stats?: { id: number; value: string; label: string }[];
   introTitle?: string | null;
   introBody?: string | null;

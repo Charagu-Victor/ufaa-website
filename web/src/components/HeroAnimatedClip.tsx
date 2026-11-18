@@ -5,16 +5,21 @@ import { useEffect, useRef, useState } from "react";
 import { mediaUrl } from "@/lib/format";
 import type { Media } from "@/lib/types";
 
-type Props = { mode: "claim" | "holder"; clip?: Media | null };
+type Props = { mode: "claim" | "holder" | "whatsapp" | "mobile"; clip?: Media | null };
 
 /** Lightweight, responsive motion graphic for the active hero journey. */
 export function HeroAnimatedClip({ mode, clip }: Props) {
   const isClaim = mode === "claim";
+  const visualLabel = {
+    claim: "Visual showing the asset search and claim journey",
+    holder: "Visual showing the holder asset reporting journey",
+    whatsapp: "Visual showing UFAA's WhatsApp asset search service",
+    mobile: "Visual showing the UFAA mobile app",
+  }[mode];
   const clipUrl = mediaUrl(clip);
   const isVideo = Boolean(clip?.mime?.startsWith("video/"));
   const videoRef = useRef<HTMLVideoElement>(null);
   const [reducedMotion, setReducedMotion] = useState(true);
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -27,19 +32,19 @@ export function HeroAnimatedClip({ mode, clip }: Props) {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (paused || reducedMotion) {
+    if (reducedMotion) {
       video.pause();
     } else {
-      void video.play().catch(() => setPaused(true));
+      void video.play().catch(() => undefined);
     }
-  }, [paused, reducedMotion, clipUrl]);
+  }, [reducedMotion, clipUrl]);
 
   return (
     <div
       key={mode}
       role="group"
-      aria-label={isClaim ? "Animated illustration of searching for and claiming an asset" : "Animated illustration of an institution reporting assets to UFAA"}
-      className={`hero-clip hero-clip-${mode} relative min-h-[320px] overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-[#1d5a82] via-[#164b75] to-[#102f55] shadow-2xl sm:min-h-[380px] ${paused || reducedMotion ? "motion-paused" : ""}`}
+      aria-label={visualLabel}
+      className={`hero-clip hero-clip-${mode} relative min-h-[320px] overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-[#1d5a82] via-[#164b75] to-[#102f55] shadow-2xl sm:min-h-[380px] ${reducedMotion ? "motion-paused" : ""}`}
     >
       {clipUrl ? (
         isVideo ? (
@@ -100,7 +105,7 @@ export function HeroAnimatedClip({ mode, clip }: Props) {
               <text x="425" y="114" fill="#18265f" fontSize="11" fontWeight="700">Claim guidance</text>
             </g>
           </>
-        ) : (
+        ) : mode === "holder" ? (
           <>
             <text x="48" y="54" fill="#f1c629" fontSize="13" fontWeight="700" letterSpacing="2.2">HOLDER REPORTING</text>
             <text x="48" y="80" fill="white" fillOpacity=".78" fontSize="14">Report, safeguard, reunite</text>
@@ -134,19 +139,79 @@ export function HeroAnimatedClip({ mode, clip }: Props) {
             <circle className="clip-pulse" cx="536" cy="130" r="27" fill="#e2b51b" fillOpacity=".16" />
             <path d="M536 114v31m-12-18 12-13 12 13m-24 14v8h24v-8" stroke="#f1c629" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </>
+        ) : mode === "whatsapp" ? (
+          <>
+            <text x="48" y="54" fill="#f1c629" fontSize="13" fontWeight="700" letterSpacing="2.2">UFAA ON WHATSAPP</text>
+            <text x="48" y="80" fill="white" fillOpacity=".78" fontSize="14">Search with a guided chat</text>
+            <g className="clip-float" filter={`url(#clip-shadow-${mode})`}>
+              <rect x="229" y="83" width="182" height="254" rx="25" fill="#0b1627" />
+              <rect x="238" y="96" width="164" height="228" rx="17" fill="#f2f4f1" />
+              <path d="M238 113q0-17 17-17h130q17 0 17 17v28H238z" fill="#087d65" />
+              <circle cx="258" cy="124" r="10" fill="white" fillOpacity=".18" />
+              <path d="M253 124q5-8 10 0 0 6-5 8-5-2-5-8Z" stroke="white" strokeWidth="1.3" />
+              <text x="275" y="122" fill="white" fontSize="10" fontWeight="700">UFAA Help</text>
+              <text x="275" y="134" fill="white" fillOpacity=".75" fontSize="8">Official service</text>
+              <rect x="248" y="157" width="116" height="37" rx="11" fill="white" />
+              <text x="258" y="173" fill="#263549" fontSize="9">Welcome. Send Hi to begin.</text>
+              <text x="258" y="185" fill="#738092" fontSize="7">UFAA guided search</text>
+              <g className="clip-chat-message">
+                <rect x="322" y="204" width="65" height="29" rx="10" fill="#d4f5c7" />
+                <text x="337" y="222" fill="#1b3d2d" fontSize="10" fontWeight="700">Hi</text>
+              </g>
+              <rect x="248" y="244" width="136" height="48" rx="11" fill="white" />
+              <text x="258" y="261" fill="#263549" fontSize="8">Follow the secure prompts</text>
+              <text x="258" y="274" fill="#263549" fontSize="8">to search for your assets.</text>
+              <rect x="248" y="301" width="135" height="13" rx="6.5" fill="#e3e8e3" />
+            </g>
+            <g className="clip-float-delay">
+              <circle cx="470" cy="136" r="35" fill="#22c96b" />
+              <path d="M453 160l4-13a19 19 0 1 1 7 8l-11 5Z" fill="none" stroke="white" strokeWidth="3" strokeLinejoin="round" />
+              <path d="M461 137q4 9 12 11l4-4 5 3q-1 7-8 6-14-3-18-16-1-7 6-8l3 5-4 3Z" fill="white" />
+            </g>
+            <path className="clip-route" d="M104 270H198" stroke="#edbd20" strokeWidth="3" strokeLinecap="round" />
+            <circle className="clip-pulse" cx="152" cy="270" r="16" fill="#e2b51b" fillOpacity=".45" />
+            <text x="151" y="306" textAnchor="middle" fill="white" fillOpacity=".88" fontSize="11">Save · Say Hi · Search</text>
+          </>
+        ) : (
+          <>
+            <text x="48" y="54" fill="#f1c629" fontSize="13" fontWeight="700" letterSpacing="2.2">UFAA MOBILE APP</text>
+            <text x="48" y="80" fill="white" fillOpacity=".78" fontSize="14">Your claim journey, on your phone</text>
+            <g className="clip-float" filter={`url(#clip-shadow-${mode})`}>
+              <rect x="235" y="73" width="170" height="272" rx="27" fill="#101827" />
+              <rect x="244" y="84" width="152" height="250" rx="19" fill={`url(#clip-card-${mode})`} />
+              <path d="M294 84h52q0 9-8 9h-36q-8 0-8-9Z" fill="#101827" />
+              <text x="260" y="117" fill="#69738a" fontSize="9" fontWeight="700">WELCOME TO UFAA</text>
+              <text x="260" y="139" fill="#18265f" fontSize="15" fontWeight="700">Find your assets</text>
+              <rect x="260" y="152" width="120" height="76" rx="13" fill="#e8eef9" />
+              <circle cx="320" cy="188" r="21" fill="#1b376d" />
+              <text x="320" y="193" textAnchor="middle" fill="#f1c629" fontSize="12" fontWeight="700">UFAA</text>
+              <rect x="260" y="242" width="120" height="31" rx="9" fill="#1b376d" />
+              <text x="320" y="262" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">Search assets</text>
+              <rect x="260" y="282" width="120" height="7" rx="3.5" fill="#dce3ef" />
+              <rect x="260" y="296" width="82" height="7" rx="3.5" fill="#dce3ef" />
+            </g>
+            <g className="clip-float-delay">
+              <rect x="80" y="165" width="116" height="48" rx="13" fill="white" />
+              <path d="m99 180 15 16 15-16" stroke="#1d7652" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              <text x="137" y="185" fill="#18265f" fontSize="9" fontWeight="700">Search on</text>
+              <text x="137" y="198" fill="#18265f" fontSize="9" fontWeight="700">the go</text>
+            </g>
+            <g>
+              <rect x="434" y="165" width="126" height="48" rx="13" fill="white" fillOpacity=".13" stroke="white" strokeOpacity=".25" />
+              <circle cx="456" cy="189" r="12" fill="#22c96b" />
+              <path d="M451 189h10m-5-5v10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+              <text x="476" y="193" fill="white" fontSize="10" fontWeight="700">App access</text>
+            </g>
+            <path className="clip-route" d="M110 270H530" stroke="#edbd20" strokeWidth="3" strokeLinecap="round" />
+            <circle cx="110" cy="270" r="13" fill="#174d77" stroke="#edbd20" strokeWidth="2" />
+            <circle className="clip-pulse" cx="530" cy="270" r="18" fill="#e2b51b" fillOpacity=".4" />
+            <text x="110" y="306" textAnchor="middle" fill="white" fillOpacity=".88" fontSize="11">Install</text>
+            <text x="530" y="306" textAnchor="middle" fill="white" fillOpacity=".88" fontSize="11">Get started</text>
+          </>
         )}
       </svg>
         </>
       )}
-      <button
-        type="button"
-        onClick={() => setPaused((value) => !value)}
-        aria-label={paused ? "Play hero animation" : "Pause hero animation"}
-        aria-pressed={paused}
-        className="absolute bottom-3 right-3 z-10 rounded-full border border-white/25 bg-ledger-950/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-ledger-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ochre"
-      >
-        {paused ? "Play animation" : "Pause animation"}
-      </button>
     </div>
   );
 }

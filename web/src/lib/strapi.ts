@@ -103,7 +103,7 @@ export async function getSiteSettings(): Promise<SiteSetting> {
 export async function getHomepage(): Promise<Homepage | null> {
   const res = await request<StrapiSingle<Homepage>>(
     "homepage",
-    { populate: { stats: true, steps: true, heroImage: true, claimHeroClip: true, holderHeroClip: true, galleryImages: { populate: ["image"] }, seo: { populate: ["shareImage"] } } },
+    { populate: { stats: true, steps: true, heroImage: true, claimHeroClip: true, holderHeroClip: true, whatsappHeroClip: true, mobileAppHeroClip: true, galleryImages: { populate: ["image"] }, seo: { populate: ["shareImage"] } } },
     { tag: "homepage" },
   );
   return res?.data ?? null;

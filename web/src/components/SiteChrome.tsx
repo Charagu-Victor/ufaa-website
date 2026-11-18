@@ -37,6 +37,7 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
       href: "/find-claim",
       items: configuredLinks(settings.findClaimLinks, [
         { label: "Find Assets", href: "/find-claim" },
+        { label: "All UFAA services", href: "/services" },
         { label: "Claiming Instructions", href: "/find-and-claim/claiming-instructions" },
         { label: "No Objection Notice", href: "/find-and-claim/no-objection-notice" },
         { label: "Reunification Agency", href: "/find-and-claim/reunification-agency" },
@@ -266,7 +267,7 @@ export async function SiteFooter() {
   const link = "underline-offset-4 hover:text-white hover:underline";
 
   return (
-    <footer className="mt-16 bg-ledger-950 text-white">
+    <footer className="mt-8 bg-ledger-950 text-white">
       <Container className="grid gap-10 py-12 md:grid-cols-4">
         <div className="md:col-span-1">
           {logoUrl ? (

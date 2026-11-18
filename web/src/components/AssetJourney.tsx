@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Container } from "./ui";
+import { CLAIM_PORTAL_URL, HOLDERS_PORTAL_URL } from "@/lib/urls";
 
 type JourneyKey = "search" | "claim" | "holder";
 
@@ -22,7 +23,7 @@ const journeys: Record<JourneyKey, {
     description: "Use UFAA’s search service to check whether assets are being held for you or a family member.",
     steps: ["Open the search service", "Check the owner details", "Follow the claim guidance if you find a match"],
     action: "Search for assets",
-    href: "/find-claim",
+    href: CLAIM_PORTAL_URL,
     secondary: "Call *361#",
     secondaryHref: "tel:*361%23",
   },
@@ -32,7 +33,7 @@ const journeys: Record<JourneyKey, {
     description: "The claim process is free. Review the instructions and forms for your situation before submitting a claim.",
     steps: ["Choose the right claim instructions", "Prepare the supporting documents", "Submit your claim through the available service"],
     action: "View claiming instructions",
-    href: "/find-claim",
+    href: CLAIM_PORTAL_URL,
     secondary: "Browse claim forms",
     secondaryHref: "/publications?category=Claim%20Form",
   },
@@ -41,8 +42,8 @@ const journeys: Record<JourneyKey, {
     title: "Reporting unclaimed assets?",
     description: "Holding institutions can review their responsibilities and access the UFAA reporting portal.",
     steps: ["Review holder reporting guidance", "Prepare the required asset information", "Report or surrender assets through the portal"],
-    action: "Open holders portal",
-    href: "/holders/login",
+    action: "Make A Report",
+    href: HOLDERS_PORTAL_URL,
     secondary: "Holder questions",
     secondaryHref: "/faqs?category=Holders",
   },

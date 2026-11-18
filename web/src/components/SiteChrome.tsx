@@ -2,22 +2,30 @@ import Link from "next/link";
 import { getPageIndex, getSiteSettings } from "@/lib/strapi";
 import type { SiteSetting } from "@/lib/types";
 import { mediaUrl } from "@/lib/format";
+import { CAREERS_SITE_URL, CLAIM_PORTAL_URL, HOLDERS_PORTAL_URL, normalizeClaimPortalUrl, normalizeHoldersPortalUrl } from "@/lib/urls";
 import { Container } from "./ui";
 
 type NavItem = { label: string; href: string };
 type NavGroup = { label: string; href: string; items: NavItem[] };
+
+const navHref = (href: string) => {
+  if (href === "/find-claim") return CLAIM_PORTAL_URL;
+  if (href === "/holders/login") return HOLDERS_PORTAL_URL;
+  if (href === "/vacancies") return CAREERS_SITE_URL;
+  return normalizeHoldersPortalUrl(normalizeClaimPortalUrl(href));
+};
 
 /** Builds the main navigation from CMS pages plus the fixed UFAA sections. */
 function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPageIndex>>): NavGroup[] {
   if (settings.mainNavigation?.length) {
     return settings.mainNavigation.map((group) => ({
       label: group.label,
-      href: group.href ?? "#",
-      items: group.items?.map(({ label, href }) => ({ label, href })) ?? [],
+      href: group.href ? navHref(group.href) : "#",
+      items: group.items?.map(({ label, href }) => ({ label, href: navHref(href) })) ?? [],
     }));
   }
   const configuredLinks = (links: SiteSetting["knowledgeHubLinks"], fallback: NavItem[]): NavItem[] =>
-    links?.length ? links.map(({ label, href }) => ({ label, href })) : fallback;
+    links?.length ? links.map(({ label, href }) => ({ label, href: navHref(href) })) : fallback.map((item) => ({ ...item, href: navHref(item.href) }));
 
   const trustFundPage = pages.find((page) => /trust.?fund/i.test(`${page.title} ${page.slug}`));
   const groups: NavGroup[] = [
@@ -28,15 +36,15 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
         { label: "About Us", href: "/about/about-ufaa" },
         { label: "Board Of Directors", href: "/leadership#board-of-directors" },
         { label: "Management Team", href: "/leadership#management-team" },
-        { label: "Departments", href: "/departments" },
+        { label: "divisions", href: "/divisions" },
         { label: "Access To Information", href: "/about/access-to-information" },
       ]),
     },
     {
       label: "Find & Claim",
-      href: "/find-claim",
+      href: CLAIM_PORTAL_URL,
       items: configuredLinks(settings.findClaimLinks, [
-        { label: "Find Assets", href: "/find-claim" },
+        { label: "Find Assets", href: CLAIM_PORTAL_URL },
         { label: "All UFAA services", href: "/services" },
         { label: "Claiming Instructions", href: "/find-and-claim/claiming-instructions" },
         { label: "No Objection Notice", href: "/find-and-claim/no-objection-notice" },
@@ -45,13 +53,13 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
     },
     {
       label: "Report Assets",
-      href: "/holders/login",
+      href: HOLDERS_PORTAL_URL,
       items: configuredLinks(settings.reportAssetsLinks, [
         { label: "Compliance Notice", href: "/holders/compliance-notice" },
         { label: "Reporting Instructions", href: "/holders/reporting-instructions" },
         { label: "Bank Details", href: "/publications" },
         { label: "Asset Codes", href: "/publications" },
-        { label: "Report Assets", href: "/holders/login" },
+        { label: "Report Assets", href: HOLDERS_PORTAL_URL },
       ]),
     },
     {
@@ -78,7 +86,7 @@ function buildNav(settings: SiteSetting, pages: Awaited<ReturnType<typeof getPag
         { label: "Notices", href: "/notices" },
       ]),
     },
-    { label: "Careers", href: "/vacancies", items: [] },
+    { label: "Careers", href: CAREERS_SITE_URL, items: [] },
   ];
 
   return groups;
@@ -288,7 +296,7 @@ export async function SiteFooter() {
           <p className="mb-3 font-serif text-lg text-white">Quick links</p>
           <ul className="space-y-1.5">
             {(settings.footerLinks?.length ? settings.footerLinks : [
-              { id: 1, label: "Search and claim", href: "/find-claim" },
+              { id: 1, label: "Search and claim", href: CLAIM_PORTAL_URL },
               { id: 2, label: "News", href: "/news" },
               { id: 3, label: "Notices", href: "/notices" },
               { id: 4, label: "Publications and forms", href: "/publications" },

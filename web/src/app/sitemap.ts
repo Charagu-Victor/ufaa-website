@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     listSlugs("publications"),
   ]);
 
-  const fixed = ["", "/services", "/find-claim", "/news", "/notices", "/tenders", "/vacancies", "/publications", "/faqs", "/leadership", "/departments", "/contact"];
+  const fixed = ["", "/services", "/news", "/notices", "/tenders", "/publications", "/faqs", "/leadership", "/divisions", "/contact"];
 
   return [
     ...fixed.map((path) => ({ url: `${site}${path}`, changeFrequency: "weekly" as const })),

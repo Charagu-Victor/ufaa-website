@@ -2,27 +2,27 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Container, Markdown, PageHeader } from "@/components/ui";
 import { mediaUrl } from "@/lib/format";
-import { listDepartments } from "@/lib/strapi";
+import { listdivisions } from "@/lib/strapi";
 
 export const metadata: Metadata = {
-  title: "Departments",
-  description: "Explore the departments that deliver the Unclaimed Financial Assets Authority's mandate.",
+  title: "divisions",
+  description: "Explore the divisions that deliver the Unclaimed Financial Assets Authority's mandate.",
 };
 
-export default async function DepartmentsPage() {
-  const departments = await listDepartments();
+export default async function divisionsPage() {
+  const divisions = await listdivisions();
 
   return (
     <>
       <PageHeader
         title="Our divisions"
         intro="Meet the teams responsible for receiving, safeguarding and reuniting unclaimed financial assets."
-        crumbs={[{ label: "About", href: "/about/about-ufaa" }, { label: "Departments" }]}
+        crumbs={[{ label: "About", href: "/about/about-ufaa" }, { label: "divisions" }]}
       />
       <Container className="py-10 sm:py-14">
-        {departments.length ? (
+        {divisions.length ? (
           <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {departments.map((department) => {
+            {divisions.map((department) => {
               const image = mediaUrl(department.image);
               return (
                 <li key={department.documentId} className="group overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(20,32,77,0.10)]">

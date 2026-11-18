@@ -165,12 +165,12 @@ export function HeroAnimatedClip({ mode, clip }: Props) {
             </g>
             <g className="clip-float-delay">
               <circle cx="470" cy="136" r="35" fill="#22c96b" />
-              <path d="M453 160l4-13a19 19 0 1 1 7 8l-11 5Z" fill="none" stroke="white" strokeWidth="3" strokeLinejoin="round" />
-              <path d="M461 137q4 9 12 11l4-4 5 3q-1 7-8 6-14-3-18-16-1-7 6-8l3 5-4 3Z" fill="white" />
+              <path d="M470 112a23 23 0 0 0-20 35l-3 12 13-4a23 23 0 1 0 10-43Z" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M460 127c1 6 7 12 13 13l4-4 5 3c-.5 4-3 6-6 6-9-1-18-10-18-18 0-3 2-5 5-5l3 5-3 3Z" fill="white" />
             </g>
             <path className="clip-route" d="M104 270H198" stroke="#edbd20" strokeWidth="3" strokeLinecap="round" />
             <circle className="clip-pulse" cx="152" cy="270" r="16" fill="#e2b51b" fillOpacity=".45" />
-            <text x="151" y="306" textAnchor="middle" fill="white" fillOpacity=".88" fontSize="11">Save · Say Hi · Search</text>
+            <text x="151" y="306" textAnchor="middle" fill="white" fillOpacity=".88" fontSize="11">Save &#183; Say Hi &#183; Search</text>
           </>
         ) : (
           <>

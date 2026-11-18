@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | UFAA",
   },
   description:
-    "Search for unclaimed financial assets, start a claim and find notices, tenders, vacancies and publications from the Unclaimed Financial Assets Authority.",
+    "Search for unclaimed financial assets, start a claim and find notices, tenders and publications from the Unclaimed Financial Assets Authority.",
   openGraph: {
     siteName: "Unclaimed Financial Assets Authority",
     type: "website",

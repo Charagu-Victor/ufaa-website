@@ -6,6 +6,7 @@ import { useEffect, useState, type FocusEvent } from "react";
 import { Container } from "./ui";
 import { HeroAnimatedClip } from "./HeroAnimatedClip";
 import type { Media } from "@/lib/types";
+import { HOLDERS_PORTAL_URL } from "@/lib/urls";
 
 type HeroStep = { id: number; title: string; description?: string | null };
 
@@ -109,7 +110,7 @@ export function HeroCarousel({
                   <Link href={claimHref} className="inline-flex min-h-12 items-center justify-center rounded-md bg-ochre px-6 py-3 font-bold text-ledger-950 shadow-sm transition hover:bg-[#f1d56c]">
                     Start claiming <span aria-hidden="true" className="ml-2">→</span>
                   </Link>
-                  <Link href="/find-claim" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/50 bg-ledger-950/35 px-6 py-3 font-bold text-white transition hover:bg-ledger-950/55">
+                  <Link href="/find-and-claim/claiming-instructions" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/50 bg-ledger-950/35 px-6 py-3 font-bold text-white transition hover:bg-ledger-950/55">
                     Claiming instructions
                   </Link>
                 </div>
@@ -124,8 +125,8 @@ export function HeroCarousel({
                   Banks, insurers, SACCOs, pension schemes, and other institutions can report and surrender unclaimed assets to UFAA.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <Link href={holdersHref ?? "/holders/login"} className="inline-flex min-h-12 items-center justify-center rounded-md bg-ochre px-6 py-3 font-bold text-ledger-950 shadow-sm transition hover:bg-[#f1d56c]">
-                    Open holders portal <span aria-hidden="true" className="ml-2">→</span>
+                  <Link href={holdersHref ?? HOLDERS_PORTAL_URL} className="inline-flex min-h-12 items-center justify-center rounded-md bg-ochre px-6 py-3 font-bold text-ledger-950 shadow-sm transition hover:bg-[#f1d56c]">
+                    Make A Report <span aria-hidden="true" className="ml-2">→</span>
                   </Link>
                   <Link href="/faqs?category=Holders" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/50 bg-ledger-950/35 px-6 py-3 font-bold text-white transition hover:bg-ledger-950/55">
                     Holder guidance
@@ -144,7 +145,7 @@ export function HeroCarousel({
                   <a href={whatsappUrl ?? "/contact"} target={whatsappUrl ? "_blank" : undefined} rel={whatsappUrl ? "noopener noreferrer" : undefined} className="inline-flex min-h-12 items-center justify-center rounded-md bg-ochre px-6 py-3 font-bold text-ledger-950 shadow-sm transition hover:bg-[#f1d56c]">
                     Open WhatsApp <span aria-hidden="true" className="ml-2">→</span>
                   </a>
-                  <Link href="/find-claim" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/50 bg-ledger-950/35 px-6 py-3 font-bold text-white transition hover:bg-ledger-950/55">
+                  <Link href="/services" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/50 bg-ledger-950/35 px-6 py-3 font-bold text-white transition hover:bg-ledger-950/55">
                     Other ways to search
                   </Link>
                 </div>

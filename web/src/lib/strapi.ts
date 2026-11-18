@@ -16,6 +16,7 @@ import type {
   Tender,
   Vacancy,
 } from "./types";
+import { CLAIM_PORTAL_URL, HOLDERS_PORTAL_URL, WHATSAPP_URL, normalizeClaimPortalUrl, normalizeHoldersPortalUrl } from "./urls";
 
 const BASE = process.env.STRAPI_URL ?? process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 const TOKEN = process.env.STRAPI_API_TOKEN;
@@ -91,13 +92,19 @@ export async function getSiteSettings(): Promise<SiteSetting> {
     { populate: { logo: true, aboutLinks: true, knowledgeHubLinks: true, findClaimLinks: true, reportAssetsLinks: true, procurementLinks: true, mainNavigation: { populate: ["items"] }, footerLinks: true } },
     { tag: "site-setting" },
   );
-  return (
-    res?.data ?? {
+  return res?.data ? {
+      ...res.data,
+      claimPortalUrl: normalizeClaimPortalUrl(res.data.claimPortalUrl),
+      holdersPortalUrl: normalizeHoldersPortalUrl(res.data.holdersPortalUrl),
+      whatsappUrl: res.data.whatsappUrl || WHATSAPP_URL,
+    } : {
       siteName: "Unclaimed Financial Assets Authority",
       shortName: "UFAA",
       tagline: "Receive, Safeguard and Re-unite Unclaimed Financial Assets",
-    }
-  );
+      claimPortalUrl: CLAIM_PORTAL_URL,
+      holdersPortalUrl: HOLDERS_PORTAL_URL,
+      whatsappUrl: WHATSAPP_URL,
+    };
 }
 
 export async function getHomepage(): Promise<Homepage | null> {
@@ -246,9 +253,9 @@ export async function listTeam() {
   return res.data;
 }
 
-export async function listDepartments() {
+export async function listdivisions() {
   const res = await list<Department>(
-    "departments",
+    "divisions",
     { sort: ["order:asc", "name:asc"], populate: ["image"], pagination: { pageSize: 100 } },
     { tag: "department" },
   );
